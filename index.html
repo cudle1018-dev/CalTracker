@@ -6,15 +6,15 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="theme-color" content="#0a0a1a"/>
-<title>KainTrack – Filipino Food Calorie Tracker</title>
+<title>KainTrack – Filipino Calorie Tracker</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{margin:0;padding:0;background:#0a0a1a;font-family:'Inter','Segoe UI',system-ui,sans-serif;color:#e0e0ff;overscroll-behavior:none;}
-input,select,textarea,button{font-family:inherit;}
-::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:#0a0a1a;} ::-webkit-scrollbar-thumb{background:#2d2d4e;border-radius:4px;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{margin:0;padding:0;background:#0a0a1a;font-family:'Inter','Segoe UI',system-ui,sans-serif;color:#e0e0ff;overscroll-behavior:none;}
+  input,select,textarea,button{font-family:inherit;}
+  ::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:#0a0a1a;} ::-webkit-scrollbar-thumb{background:#2d2d4e;border-radius:4px;}
 </style>
 </head>
 <body>
@@ -24,75 +24,75 @@ const { useState, useEffect, useRef, useCallback } = React;
 
 // ── Storage (localStorage) ───────────────────────────────────────────────────
 function load(key, fallback) {
-try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; }
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; }
 }
 function save(key, value) {
-try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
 }
 
 // ── Constants ────────────────────────────────────────────────────────────────
 const ACTIVITY_LEVELS = [
-{ label: "Sedentary", description: "Little or no exercise", multiplier: 1.2 },
-{ label: "Lightly Active", description: "1–3 days/week", multiplier: 1.375 },
-{ label: "Moderately Active", description: "3–5 days/week", multiplier: 1.55 },
-{ label: "Very Active", description: "6–7 days/week", multiplier: 1.725 },
-{ label: "Extra Active", description: "Physical job or 2x/day", multiplier: 1.9 },
+  { label: "Sedentary", description: "Little or no exercise", multiplier: 1.2 },
+  { label: "Lightly Active", description: "1–3 days/week", multiplier: 1.375 },
+  { label: "Moderately Active", description: "3–5 days/week", multiplier: 1.55 },
+  { label: "Very Active", description: "6–7 days/week", multiplier: 1.725 },
+  { label: "Extra Active", description: "Physical job or 2x/day", multiplier: 1.9 },
 ];
 
 const FILIPINO_FOODS = [
-{ name: "Adobo (Chicken)", cal: 320, per: "1 cup" },
-{ name: "Sinigang na Baboy", cal: 280, per: "1 bowl" },
-{ name: "Kare-Kare", cal: 390, per: "1 cup" },
-{ name: "Lechon Kawali", cal: 450, per: "100g" },
-{ name: "Tinola", cal: 210, per: "1 bowl" },
-{ name: "Bistek Tagalog", cal: 310, per: "1 serving" },
-{ name: "Pork Sisig", cal: 420, per: "1 plate" },
-{ name: "Bulalo", cal: 380, per: "1 bowl" },
-{ name: "Caldereta", cal: 360, per: "1 cup" },
-{ name: "Dinuguan", cal: 290, per: "1 cup" },
-{ name: "Pancit Canton", cal: 330, per: "1 plate" },
-{ name: "Pancit Palabok", cal: 290, per: "1 plate" },
-{ name: "Arroz Caldo", cal: 220, per: "1 bowl" },
-{ name: "Champorado", cal: 260, per: "1 bowl" },
-{ name: "Goto", cal: 200, per: "1 bowl" },
-{ name: "Lugaw", cal: 130, per: "1 bowl" },
-{ name: "Sinangag (Garlic Fried Rice)", cal: 250, per: "1 cup" },
-{ name: "Daing na Bangus", cal: 240, per: "1 piece" },
-{ name: "Inihaw na Liempo", cal: 380, per: "100g" },
-{ name: "Tortang Talong", cal: 180, per: "1 piece" },
-{ name: "Ginisang Ampalaya", cal: 120, per: "1 cup" },
-{ name: "Pinakbet", cal: 160, per: "1 cup" },
-{ name: "Laing", cal: 290, per: "1 cup" },
-{ name: "Sinigang na Hipon", cal: 190, per: "1 bowl" },
-{ name: "Halo-Halo", cal: 310, per: "1 glass" },
-{ name: "Leche Flan", cal: 250, per: "1 slice" },
-{ name: "Bibingka", cal: 280, per: "1 piece" },
-{ name: "Puto", cal: 90, per: "1 piece" },
-{ name: "Turon", cal: 150, per: "1 piece" },
-{ name: "Banana Cue", cal: 130, per: "1 piece" },
+  { name: "Adobo (Chicken)", cal: 320, per: "1 cup" },
+  { name: "Sinigang na Baboy", cal: 280, per: "1 bowl" },
+  { name: "Kare-Kare", cal: 390, per: "1 cup" },
+  { name: "Lechon Kawali", cal: 450, per: "100g" },
+  { name: "Tinola", cal: 210, per: "1 bowl" },
+  { name: "Bistek Tagalog", cal: 310, per: "1 serving" },
+  { name: "Pork Sisig", cal: 420, per: "1 plate" },
+  { name: "Bulalo", cal: 380, per: "1 bowl" },
+  { name: "Caldereta", cal: 360, per: "1 cup" },
+  { name: "Dinuguan", cal: 290, per: "1 cup" },
+  { name: "Pancit Canton", cal: 330, per: "1 plate" },
+  { name: "Pancit Palabok", cal: 290, per: "1 plate" },
+  { name: "Arroz Caldo", cal: 220, per: "1 bowl" },
+  { name: "Champorado", cal: 260, per: "1 bowl" },
+  { name: "Goto", cal: 200, per: "1 bowl" },
+  { name: "Lugaw", cal: 130, per: "1 bowl" },
+  { name: "Sinangag (Garlic Fried Rice)", cal: 250, per: "1 cup" },
+  { name: "Daing na Bangus", cal: 240, per: "1 piece" },
+  { name: "Inihaw na Liempo", cal: 380, per: "100g" },
+  { name: "Tortang Talong", cal: 180, per: "1 piece" },
+  { name: "Ginisang Ampalaya", cal: 120, per: "1 cup" },
+  { name: "Pinakbet", cal: 160, per: "1 cup" },
+  { name: "Laing", cal: 290, per: "1 cup" },
+  { name: "Sinigang na Hipon", cal: 190, per: "1 bowl" },
+  { name: "Halo-Halo", cal: 310, per: "1 glass" },
+  { name: "Leche Flan", cal: 250, per: "1 slice" },
+  { name: "Bibingka", cal: 280, per: "1 piece" },
+  { name: "Puto", cal: 90, per: "1 piece" },
+  { name: "Turon", cal: 150, per: "1 piece" },
+  { name: "Banana Cue", cal: 130, per: "1 piece" },
 ];
 
 const EXERCISE_PRESETS = [
-{ name: "Walking (casual)", emoji: "🚶", met: 3.0, category: "Cardio" },
-{ name: "Brisk Walking", emoji: "🚶", met: 4.3, category: "Cardio" },
-{ name: "Running (5 km/h)", emoji: "🏃", met: 8.3, category: "Cardio" },
-{ name: "Running (8 km/h)", emoji: "🏃", met: 11.5, category: "Cardio" },
-{ name: "Cycling (leisure)", emoji: "🚴", met: 4.0, category: "Cardio" },
-{ name: "Cycling (vigorous)", emoji: "🚴", met: 10.0, category: "Cardio" },
-{ name: "Swimming", emoji: "🏊", met: 6.0, category: "Cardio" },
-{ name: "Jump Rope", emoji: "🪢", met: 10.0, category: "Cardio" },
-{ name: "Zumba / Dance", emoji: "💃", met: 6.5, category: "Cardio" },
-{ name: "Basketball", emoji: "🏀", met: 8.0, category: "Sports" },
-{ name: "Badminton", emoji: "🏸", met: 5.5, category: "Sports" },
-{ name: "Volleyball", emoji: "🏐", met: 4.0, category: "Sports" },
-{ name: "Weight Training", emoji: "🏋️", met: 5.0, category: "Strength" },
-{ name: "Bodyweight Exercises", emoji: "💪", met: 4.5, category: "Strength" },
-{ name: "Yoga", emoji: "🧘", met: 2.5, category: "Flexibility" },
-{ name: "Pilates", emoji: "🤸", met: 3.0, category: "Flexibility" },
-{ name: "HIIT", emoji: "⚡", met: 12.0, category: "Cardio" },
-{ name: "Aerobics", emoji: "🎵", met: 7.0, category: "Cardio" },
-{ name: "Hiking", emoji: "⛰️", met: 6.0, category: "Outdoor" },
-{ name: "Housework / Cleaning", emoji: "🧹", met: 3.3, category: "Daily" },
+  { name: "Walking (casual)", emoji: "🚶", met: 3.0, category: "Cardio" },
+  { name: "Brisk Walking", emoji: "🚶", met: 4.3, category: "Cardio" },
+  { name: "Running (5 km/h)", emoji: "🏃", met: 8.3, category: "Cardio" },
+  { name: "Running (8 km/h)", emoji: "🏃", met: 11.5, category: "Cardio" },
+  { name: "Cycling (leisure)", emoji: "🚴", met: 4.0, category: "Cardio" },
+  { name: "Cycling (vigorous)", emoji: "🚴", met: 10.0, category: "Cardio" },
+  { name: "Swimming", emoji: "🏊", met: 6.0, category: "Cardio" },
+  { name: "Jump Rope", emoji: "🪢", met: 10.0, category: "Cardio" },
+  { name: "Zumba / Dance", emoji: "💃", met: 6.5, category: "Cardio" },
+  { name: "Basketball", emoji: "🏀", met: 8.0, category: "Sports" },
+  { name: "Badminton", emoji: "🏸", met: 5.5, category: "Sports" },
+  { name: "Volleyball", emoji: "🏐", met: 4.0, category: "Sports" },
+  { name: "Weight Training", emoji: "🏋️", met: 5.0, category: "Strength" },
+  { name: "Bodyweight Exercises", emoji: "💪", met: 4.5, category: "Strength" },
+  { name: "Yoga", emoji: "🧘", met: 2.5, category: "Flexibility" },
+  { name: "Pilates", emoji: "🤸", met: 3.0, category: "Flexibility" },
+  { name: "HIIT", emoji: "⚡", met: 12.0, category: "Cardio" },
+  { name: "Aerobics", emoji: "🎵", met: 7.0, category: "Cardio" },
+  { name: "Hiking", emoji: "⛰️", met: 6.0, category: "Outdoor" },
+  { name: "Housework / Cleaning", emoji: "🧹", met: 3.3, category: "Daily" },
 ];
 
 const DEFAULT_PROFILE = { weight: "", height: "", age: "", sex: "male", activity: 1.55, targetWeight: "", weeks: "" };
@@ -104,546 +104,718 @@ const card = { background: "linear-gradient(135deg,#1a1a3e,#0f0f23)", borderRadi
 
 // ── Config ───────────────────────────────────────────────────────────────────
 const APP_PASSWORD = "RUIFAN";
-[  ] const API_KEY = "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";
+const API_KEY = "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";
 
 // ── API helpers ───────────────────────────────────────────────────────────────
 async function callClaude(prompt) {
-const res = await fetch("https://api.anthropic.com/v1/messages", {
-method: "POST",
-headers: { "Content-Type": "application/json", "x-api-key": API_KEY, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
-body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, messages: [{ role: "user", content: prompt }] })
-});
-const data = await res.json();
-if (data.error) throw new Error(data.error.message);
-return data.content.map(i => i.text || "").join("").replace(/json|/g, "").trim();
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-api-key": API_KEY, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
+    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, messages: [{ role: "user", content: prompt }] })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message);
+  return data.content.map(i => i.text || "").join("").replace(/```json|```/g, "").trim();
 }
 
 async function callClaudeWithImage(base64, prompt) {
-const res = await fetch("https://api.anthropic.com/v1/messages", {
-method: "POST",
-headers: { "Content-Type": "application/json", "x-api-key": API_KEY, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
-body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, messages: [{ role: "user", content: [{ type: "image", source: { type: "base64", media_type: "image/jpeg", data: base64 } }, { type: "text", text: prompt }] }] })
-});
-const data = await res.json();
-if (data.error) throw new Error(data.error.message);
-return data.content.map(i => i.text || "").join("").replace(/json|/g, "").trim();
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-api-key": API_KEY, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
+    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, messages: [{ role: "user", content: [{ type: "image", source: { type: "base64", media_type: "image/jpeg", data: base64 } }, { type: "text", text: prompt }] }] })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message);
+  return data.content.map(i => i.text || "").join("").replace(/```json|```/g, "").trim();
 }
 
 // ── Password screen ───────────────────────────────────────────────────────────
 function PasswordScreen({ onUnlock }) {
-const [pw, setPw] = useState("");
-const [shake, setShake] = useState(false);
-const [showPw, setShowPw] = useState(false);
+  const [pw, setPw] = useState("");
+  const [shake, setShake] = useState(false);
+  const [showPw, setShowPw] = useState(false);
 
-const attempt = () => {
-if (pw.toUpperCase() === APP_PASSWORD) {
-save("kt-unlocked", true);
-onUnlock();
-} else {
-setShake(true);
-setPw("");
-setTimeout(() => setShake(false), 600);
-}
-};
+  const attempt = () => {
+    if (pw.toUpperCase() === APP_PASSWORD) {
+      save("kt-unlocked", true);
+      onUnlock();
+    } else {
+      setShake(true);
+      setPw("");
+      setTimeout(() => setShake(false), 600);
+    }
+  };
 
-return (
-<div style={{ minHeight: "100vh", background: "#0a0a1a", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 32 }}>
-<div style={{ fontSize: 56, marginBottom: 12 }}>🍚</div>
-<div style={{ fontSize: 26, fontWeight: 800, marginBottom: 4 }}>
-<span style={{ background: "linear-gradient(90deg,#7c7cff,#38ef7d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Kain</span>
-<span style={{ color: "#e0e0ff" }}>Track</span>
-</div>
-<div style={{ color: "#666", fontSize: 13, marginBottom: 40 }}>Filipino Calorie Tracker</div>
+  return (
+    <div style={{ minHeight: "100vh", background: "#0a0a1a", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 32 }}>
+      <div style={{ fontSize: 56, marginBottom: 12 }}>🍚</div>
+      <div style={{ fontSize: 26, fontWeight: 800, marginBottom: 4 }}>
+        <span style={{ background: "linear-gradient(90deg,#7c7cff,#38ef7d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Kain</span>
+        <span style={{ color: "#e0e0ff" }}>Track</span>
+      </div>
+      <div style={{ color: "#666", fontSize: 13, marginBottom: 40 }}>Filipino Calorie Tracker</div>
 
-<div style={{
-width: "100%", maxWidth: 340,
-animation: shake ? "shake 0.5s" : "none"
-}}>
-<style>{@keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-10px)} 40%,80%{transform:translateX(10px)} }}</style>
-<div style={{ color: "#9090c0", fontSize: 13, fontWeight: 600, marginBottom: 8, textAlign: "center" }}>Enter Password</div>
-<div style={{ position: "relative" }}>
-<input
-type={showPw ? "text" : "password"}
-style={{ ...inp, textAlign: "center", fontSize: 20, letterSpacing: 4, paddingRight: 44 }}
-placeholder="••••••"
-value={pw}
-onChange={e => setPw(e.target.value)}
-onKeyDown={e => e.key === "Enter" && attempt()}
-autoFocus
-/>
-<button onClick={() => setShowPw(v => !v)} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "#666", cursor: "pointer", fontSize: 16, padding: 0 }}>
-{showPw ? "🙈" : "👁️"}
-</button>
-</div>
-<button onClick={attempt} style={{ width: "100%", marginTop: 16, background: "linear-gradient(90deg,#7c7cff,#38ef7d)", border: "none", borderRadius: 12, padding: "14px", color: "#0a0a1a", fontWeight: 800, fontSize: 16, cursor: "pointer" }}>
-Unlock →
-</button>
-{shake && <div style={{ textAlign: "center", color: "#ff6b6b", marginTop: 12, fontSize: 13 }}>Wrong password. Try again.</div>}
-</div>
-</div>
-);
+      <div style={{
+        width: "100%", maxWidth: 340,
+        animation: shake ? "shake 0.5s" : "none"
+      }}>
+        <style>{`@keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-10px)} 40%,80%{transform:translateX(10px)} }`}</style>
+        <div style={{ color: "#9090c0", fontSize: 13, fontWeight: 600, marginBottom: 8, textAlign: "center" }}>Enter Password</div>
+        <div style={{ position: "relative" }}>
+          <input
+            type={showPw ? "text" : "password"}
+            style={{ ...inp, textAlign: "center", fontSize: 20, letterSpacing: 4, paddingRight: 44 }}
+            placeholder="••••••"
+            value={pw}
+            onChange={e => setPw(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && attempt()}
+            autoFocus
+          />
+          <button onClick={() => setShowPw(v => !v)} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "#666", cursor: "pointer", fontSize: 16, padding: 0 }}>
+            {showPw ? "🙈" : "👁️"}
+          </button>
+        </div>
+        <button onClick={attempt} style={{ width: "100%", marginTop: 16, background: "linear-gradient(90deg,#7c7cff,#38ef7d)", border: "none", borderRadius: 12, padding: "14px", color: "#0a0a1a", fontWeight: 800, fontSize: 16, cursor: "pointer" }}>
+          Unlock →
+        </button>
+        {shake && <div style={{ textAlign: "center", color: "#ff6b6b", marginTop: 12, fontSize: 13 }}>Wrong password. Try again.</div>}
+      </div>
+    </div>
+  );
 }
 
 // ── CalorieBar ───────────────────────────────────────────────────────────────
 function CalorieBar({ consumed, burned, target }) {
-const net = consumed - burned;
-const over = net > target;
-return (
-<div style={{ marginTop: 8 }}>
-<div style={{ background: "#1a1a2e", borderRadius: 12, height: 18, overflow: "hidden", border: "1px solid #2d2d4e", position: "relative" }}>
-<div style={{ width: ${Math.min((consumed / target) * 100, 100)}%, height: "100%", background: over ? "linear-gradient(90deg,#ff4444,#ff6b6b)" : "linear-gradient(90deg,#11998e,#38ef7d)", borderRadius: 12, position: "absolute", transition: "width 0.5s" }} /&gt; {burned &gt; 0 && &lt;div style={{ position: "absolute", left: ``${Math.max(Math.min(((consumed - burned) / target) * 100, 100), 0)}%, width: ${Math.min((burned / target) * 100, 100 - Math.max(((consumed - burned) / target) * 100, 0))}%, height: "100%", background: "rgba(168,85,247,0.45)", borderRadius: "0 12px 12px 0", transition: "all 0.5s" }} /&gt;} &lt;/div&gt; &lt;div style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 12, color: "#888" }}&gt; &lt;span&gt;{consumed} eaten{burned &gt; 0 ? · ${burned} burned : ""}</span>
-<span>{target} kcal goal</span>
-</div>
-</div>
-);
+  const net = consumed - burned;
+  const over = net > target;
+  return (
+    <div style={{ marginTop: 8 }}>
+      <div style={{ background: "#1a1a2e", borderRadius: 12, height: 18, overflow: "hidden", border: "1px solid #2d2d4e", position: "relative" }}>
+        <div style={{ width: `${Math.min((consumed / target) * 100, 100)}%`, height: "100%", background: over ? "linear-gradient(90deg,#ff4444,#ff6b6b)" : "linear-gradient(90deg,#11998e,#38ef7d)", borderRadius: 12, position: "absolute", transition: "width 0.5s" }} />
+        {burned > 0 && <div style={{ position: "absolute", left: `${Math.max(Math.min(((consumed - burned) / target) * 100, 100), 0)}%`, width: `${Math.min((burned / target) * 100, 100 - Math.max(((consumed - burned) / target) * 100, 0))}%`, height: "100%", background: "rgba(168,85,247,0.45)", borderRadius: "0 12px 12px 0", transition: "all 0.5s" }} />}
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 12, color: "#888" }}>
+        <span>{consumed} eaten{burned > 0 ? ` · ${burned} burned` : ""}</span>
+        <span>{target} kcal goal</span>
+      </div>
+    </div>
+  );
 }
 
 // ── SetupTab ─────────────────────────────────────────────────────────────────
 function SetupTab({ profile, setProfile, onSave }) {
-const [local, setLocal] = useState(profile);
-useEffect(() => setLocal(profile), [profile]);
-const set = (k, v) => setLocal(p => ({ ...p, [k]: v }));
-return (
-<div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-<div style={card}>
-<div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>BODY METRICS</div>
-<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-<div><label style={lbl}>Weight (kg)</label><input style={inp} type="number" value={local.weight} onChange={e => set("weight", e.target.value)} placeholder="e.g. 65" /></div>
-<div><label style={lbl}>Height (cm)</label><input style={inp} type="number" value={local.height} onChange={e => set("height", e.target.value)} placeholder="e.g. 165" /></div>
-<div><label style={lbl}>Age</label><input style={inp} type="number" value={local.age} onChange={e => set("age", e.target.value)} placeholder="e.g. 25" /></div>
-<div><label style={lbl}>Sex</label>
-<select style={inp} value={local.sex} onChange={e => set("sex", e.target.value)}>
-<option value="male">Male</option><option value="female">Female</option>
-</select>
-</div>
-</div>
-</div>
-<div style={card}>
-<div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>ACTIVITY LEVEL</div>
-<div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-{ACTIVITY_LEVELS.map(a => (
-<button key={a.label} onClick={() => set("activity", a.multiplier)} style={{ background: local.activity === a.multiplier ? "linear-gradient(90deg,#7c7cff22,#38ef7d11)" : "transparent", border: local.activity === a.multiplier ? "1px solid #7c7cff" : "1px solid #2d2d4e", borderRadius: 10, padding: "10px 14px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", color: local.activity === a.multiplier ? "#e0e0ff" : "#888", transition: "all 0.2s" }}>
-<span style={{ fontWeight: 600, fontSize: 14 }}>{a.label}</span>
-<span style={{ fontSize: 12 }}>{a.description}</span>
-</button>
-))}
-</div>
-</div>
-<div style={card}>
-<div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>WEIGHT GOAL</div>
-<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-<div><label style={lbl}>Target Weight (kg)</label><input style={inp} type="number" value={local.targetWeight} onChange={e => set("targetWeight", e.target.value)} placeholder="e.g. 52" /></div>
-<div><label style={lbl}>Weeks to Achieve</label><input style={inp} type="number" value={local.weeks} onChange={e => set("weeks", e.target.value)} placeholder="e.g. 12" /></div>
-</div>
-</div>
-<button onClick={() => { setProfile(local); onSave(local); }} style={{ background: "linear-gradient(90deg,#7c7cff,#38ef7d)", border: "none", borderRadius: 12, padding: "14px 0", color: "#0a0a1a", fontWeight: 800, fontSize: 16, cursor: "pointer", width: "100%" }}>
-Calculate My Calorie Goal →
-</button>
-</div>
-);
+  const [local, setLocal] = useState(profile);
+  useEffect(() => setLocal(profile), [profile]);
+  const set = (k, v) => setLocal(p => ({ ...p, [k]: v }));
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+      <div style={card}>
+        <div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>BODY METRICS</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div><label style={lbl}>Weight (kg)</label><input style={inp} type="number" value={local.weight} onChange={e => set("weight", e.target.value)} placeholder="e.g. 65" /></div>
+          <div><label style={lbl}>Height (cm)</label><input style={inp} type="number" value={local.height} onChange={e => set("height", e.target.value)} placeholder="e.g. 165" /></div>
+          <div><label style={lbl}>Age</label><input style={inp} type="number" value={local.age} onChange={e => set("age", e.target.value)} placeholder="e.g. 25" /></div>
+          <div><label style={lbl}>Sex</label>
+            <select style={inp} value={local.sex} onChange={e => set("sex", e.target.value)}>
+              <option value="male">Male</option><option value="female">Female</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div style={card}>
+        <div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>ACTIVITY LEVEL</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {ACTIVITY_LEVELS.map(a => (
+            <button key={a.label} onClick={() => set("activity", a.multiplier)} style={{ background: local.activity === a.multiplier ? "linear-gradient(90deg,#7c7cff22,#38ef7d11)" : "transparent", border: local.activity === a.multiplier ? "1px solid #7c7cff" : "1px solid #2d2d4e", borderRadius: 10, padding: "10px 14px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", color: local.activity === a.multiplier ? "#e0e0ff" : "#888", transition: "all 0.2s" }}>
+              <span style={{ fontWeight: 600, fontSize: 14 }}>{a.label}</span>
+              <span style={{ fontSize: 12 }}>{a.description}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div style={card}>
+        <div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>WEIGHT GOAL</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div><label style={lbl}>Target Weight (kg)</label><input style={inp} type="number" value={local.targetWeight} onChange={e => set("targetWeight", e.target.value)} placeholder="e.g. 52" /></div>
+          <div><label style={lbl}>Weeks to Achieve</label><input style={inp} type="number" value={local.weeks} onChange={e => set("weeks", e.target.value)} placeholder="e.g. 12" /></div>
+        </div>
+      </div>
+      <button onClick={() => { setProfile(local); onSave(local); }} style={{ background: "linear-gradient(90deg,#7c7cff,#38ef7d)", border: "none", borderRadius: 12, padding: "14px 0", color: "#0a0a1a", fontWeight: 800, fontSize: 16, cursor: "pointer", width: "100%" }}>
+        Calculate My Calorie Goal →
+      </button>
+    </div>
+  );
 }
 
 // ── LogFoodTab ───────────────────────────────────────────────────────────────
 function LogFoodTab({ calorieGoal, log, setLog, exerciseLog }) {
-const [desc, setDesc] = useState("");
-const [imgPreview, setImgPreview] = useState(null);
-const [imgBase64, setImgBase64] = useState(null);
-const [loading, setLoading] = useState(false);
-const [result, setResult] = useState(null);
-const fileRef = useRef();
-const todayKey = new Date().toDateString();
-const todayLog = log[todayKey] || [];
-const consumed = todayLog.reduce((s, e) => s + e.cal, 0);
-const burned = (exerciseLog[todayKey] || []).reduce((s, e) => s + e.cal, 0);
-const net = consumed - burned;
-const remaining = calorieGoal - net;
+  const [desc, setDesc] = useState("");
+  const [imgPreview, setImgPreview] = useState(null);
+  const [imgBase64, setImgBase64] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+  const fileRef = useRef();
+  const todayKey = new Date().toDateString();
+  const todayLog = log[todayKey] || [];
+  const consumed = todayLog.reduce((s, e) => s + e.cal, 0);
+  const burned = (exerciseLog[todayKey] || []).reduce((s, e) => s + e.cal, 0);
+  const net = consumed - burned;
+  const remaining = calorieGoal - net;
 
-const handleImage = (e) => {
-const file = e.target.files[0]; if (!file) return;
-const reader = new FileReader();
-reader.onload = ev => { setImgPreview(ev.target.result); setImgBase64(ev.target.result.split(",")[1]); };
-reader.readAsDataURL(file);
-};
+  const handleImage = (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => { setImgPreview(ev.target.result); setImgBase64(ev.target.result.split(",")[1]); };
+    reader.readAsDataURL(file);
+  };
 
-const analyze = async () => {
-if (!desc && !imgBase64) return;
-setLoading(true); setResult(null);
-try {
-const prompt = You are a nutrition expert. Analyze this food${desc ? : "${desc}": " in the image"}. Return ONLY a JSON object, no markdown: {"name":"Food Name","calories":000,"confidence":"high/medium/low","notes":"brief note"}. Estimate for a typical single serving.;
-const text = imgBase64 ? await callClaudeWithImage(imgBase64, prompt) : await callClaude(prompt);
-setResult(JSON.parse(text));
-} catch(err) {
-setResult({ name: desc || "Unknown food", calories: 0, confidence: "low", notes: "Could not analyze. Please try again." });
-}
-setLoading(false);
-};
+  const analyze = async () => {
+    if (!desc && !imgBase64) return;
+    setLoading(true); setResult(null);
+    try {
+      const prompt = `You are a nutrition expert. Analyze this food${desc ? `: "${desc}"` : " in the image"}. Return ONLY a JSON object, no markdown: {"name":"Food Name","calories":000,"confidence":"high/medium/low","notes":"brief note"}. Estimate for a typical single serving.`;
+      const text = imgBase64 ? await callClaudeWithImage(imgBase64, prompt) : await callClaude(prompt);
+      setResult(JSON.parse(text));
+    } catch(err) {
+      setResult({ name: desc || "Unknown food", calories: 0, confidence: "low", notes: "Could not analyze. Please try again." });
+    }
+    setLoading(false);
+  };
 
-const addToLog = () => {
-if (!result) return;
-const entry = { name: result.name, cal: result.calories, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) };
-const updated = { ...log, [todayKey]: [...(log[todayKey] || []), entry] };
-setLog(updated);
-setDesc(""); setImgPreview(null); setImgBase64(null); setResult(null);
-};
+  const addToLog = () => {
+    if (!result) return;
+    const entry = { name: result.name, cal: result.calories, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) };
+    const updated = { ...log, [todayKey]: [...(log[todayKey] || []), entry] };
+    setLog(updated);
+    setDesc(""); setImgPreview(null); setImgBase64(null); setResult(null);
+  };
 
-const removeEntry = (i) => setLog({ ...log, [todayKey]: log[todayKey].filter((_, idx) => idx !== i) });
+  const removeEntry = (i) => setLog({ ...log, [todayKey]: log[todayKey].filter((_, idx) => idx !== i) });
 
-return (
-<div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-<div style={card}>
-<div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 10 }}>
-<div>
-<div style={{ color: "#9090c0", fontSize: 12, fontWeight: 700, letterSpacing: 1 }}>NET CALORIES TODAY</div>
-<div style={{ fontSize: 32, fontWeight: 800, color: remaining < 0 ? "#ff6b6b" : "#38ef7d", lineHeight: 1.1 }}>
-{remaining < 0 ? "+" : ""}{Math.abs(remaining)}
-<span style={{ fontSize: 14, fontWeight: 400, color: "#888", marginLeft: 6 }}>kcal {remaining < 0 ? "over" : "remaining"}</span>
-</div>
-</div>
-<div style={{ textAlign: "right" }}>
-<div style={{ color: "#9090c0", fontSize: 12 }}>Goal</div>
-<div style={{ color: "#e0e0ff", fontWeight: 700 }}>{calorieGoal} kcal</div>
-</div>
-</div>
-<CalorieBar consumed={consumed} burned={burned} target={calorieGoal} />
-{burned > 0 && (
-<div style={{ display: "flex", gap: 16, marginTop: 10 }}>
-<span style={{ fontSize: 12, color: "#38ef7d" }}>🍽️ {consumed} eaten</span>
-<span style={{ fontSize: 12, color: "#a855f7" }}>🔥 {burned} burned</span>
-<span style={{ fontSize: 12, color: "#ffd200" }}>= {net} net</span>
-</div>
-)}
-</div>
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div style={card}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 10 }}>
+          <div>
+            <div style={{ color: "#9090c0", fontSize: 12, fontWeight: 700, letterSpacing: 1 }}>NET CALORIES TODAY</div>
+            <div style={{ fontSize: 32, fontWeight: 800, color: remaining < 0 ? "#ff6b6b" : "#38ef7d", lineHeight: 1.1 }}>
+              {remaining < 0 ? "+" : ""}{Math.abs(remaining)}
+              <span style={{ fontSize: 14, fontWeight: 400, color: "#888", marginLeft: 6 }}>kcal {remaining < 0 ? "over" : "remaining"}</span>
+            </div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ color: "#9090c0", fontSize: 12 }}>Goal</div>
+            <div style={{ color: "#e0e0ff", fontWeight: 700 }}>{calorieGoal} kcal</div>
+          </div>
+        </div>
+        <CalorieBar consumed={consumed} burned={burned} target={calorieGoal} />
+        {burned > 0 && (
+          <div style={{ display: "flex", gap: 16, marginTop: 10 }}>
+            <span style={{ fontSize: 12, color: "#38ef7d" }}>🍽️ {consumed} eaten</span>
+            <span style={{ fontSize: 12, color: "#a855f7" }}>🔥 {burned} burned</span>
+            <span style={{ fontSize: 12, color: "#ffd200" }}>= {net} net</span>
+          </div>
+        )}
+      </div>
 
-<div style={card}>
-<div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>ADD FOOD</div>
-<textarea style={{ ...inp, minHeight: 70, resize: "vertical" }} placeholder="Describe what you ate... e.g. '1 cup of chicken adobo with rice'" value={desc} onChange={e => setDesc(e.target.value)} />
-<div style={{ display: "flex", gap: 10, marginTop: 10 }}>
-<button onClick={() => fileRef.current.click()} style={{ flex: 1, background: "#1a1a2e", border: "1px dashed #4d4d7f", borderRadius: 10, padding: "10px", color: "#9090c0", cursor: "pointer", fontSize: 13 }}>
-📷 {imgPreview ? "Change" : "Add Photo"}
-</button>
-<input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleImage} />
-<button onClick={analyze} disabled={loading || (!desc && !imgBase64)} style={{ flex: 2, background: (!desc && !imgBase64) ? "#2d2d4e" : "linear-gradient(90deg,#7c7cff,#38ef7d)", border: "none", borderRadius: 10, padding: "10px 16px", color: (!desc && !imgBase64) ? "#666" : "#0a0a1a", fontWeight: 700, fontSize: 14, cursor: "pointer" }}>
-{loading ? "Analyzing…" : "🔍 Analyze"}
-</button>
-</div>
-{imgPreview && <img src={imgPreview} alt="food" style={{ width: "100%", borderRadius: 10, marginTop: 12, maxHeight: 200, objectFit: "cover" }} />}
-{result && (
-<div style={{ background: "#0a0a1a", borderRadius: 12, padding: 16, marginTop: 14, border: "1px solid #38ef7d44" }}>
-<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-<div><div style={{ color: "#e0e0ff", fontWeight: 700, fontSize: 16 }}>{result.name}</div><div style={{ color: "#888", fontSize: 12, marginTop: 2 }}>{result.notes}</div></div>
-<div style={{ textAlign: "right" }}><div style={{ color: "#38ef7d", fontWeight: 800, fontSize: 26 }}>{result.calories}</div><div style={{ color: "#888", fontSize: 11 }}>kcal · {result.confidence}</div></div>
-</div>
-<button onClick={addToLog} style={{ width: "100%", marginTop: 12, background: "linear-gradient(90deg,#7c7cff,#38ef7d)", border: "none", borderRadius: 10, padding: "10px", color: "#0a0a1a", fontWeight: 700, cursor: "pointer" }}>+ Add to Log</button>
-</div>
-)}
-</div>
+      <div style={card}>
+        <div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>ADD FOOD</div>
+        <textarea style={{ ...inp, minHeight: 70, resize: "vertical" }} placeholder="Describe what you ate... e.g. '1 cup of chicken adobo with rice'" value={desc} onChange={e => setDesc(e.target.value)} />
+        <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
+          <button onClick={() => fileRef.current.click()} style={{ flex: 1, background: "#1a1a2e", border: "1px dashed #4d4d7f", borderRadius: 10, padding: "10px", color: "#9090c0", cursor: "pointer", fontSize: 13 }}>
+            📷 {imgPreview ? "Change" : "Add Photo"}
+          </button>
+          <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleImage} />
+          <button onClick={analyze} disabled={loading || (!desc && !imgBase64)} style={{ flex: 2, background: (!desc && !imgBase64) ? "#2d2d4e" : "linear-gradient(90deg,#7c7cff,#38ef7d)", border: "none", borderRadius: 10, padding: "10px 16px", color: (!desc && !imgBase64) ? "#666" : "#0a0a1a", fontWeight: 700, fontSize: 14, cursor: "pointer" }}>
+            {loading ? "Analyzing…" : "🔍 Analyze"}
+          </button>
+        </div>
+        {imgPreview && <img src={imgPreview} alt="food" style={{ width: "100%", borderRadius: 10, marginTop: 12, maxHeight: 200, objectFit: "cover" }} />}
+        {result && (
+          <div style={{ background: "#0a0a1a", borderRadius: 12, padding: 16, marginTop: 14, border: "1px solid #38ef7d44" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div><div style={{ color: "#e0e0ff", fontWeight: 700, fontSize: 16 }}>{result.name}</div><div style={{ color: "#888", fontSize: 12, marginTop: 2 }}>{result.notes}</div></div>
+              <div style={{ textAlign: "right" }}><div style={{ color: "#38ef7d", fontWeight: 800, fontSize: 26 }}>{result.calories}</div><div style={{ color: "#888", fontSize: 11 }}>kcal · {result.confidence}</div></div>
+            </div>
+            <button onClick={addToLog} style={{ width: "100%", marginTop: 12, background: "linear-gradient(90deg,#7c7cff,#38ef7d)", border: "none", borderRadius: 10, padding: "10px", color: "#0a0a1a", fontWeight: 700, cursor: "pointer" }}>+ Add to Log</button>
+          </div>
+        )}
+      </div>
 
-{todayLog.length > 0 && (
-<div style={card}>
-<div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>TODAY'S FOOD LOG</div>
-<div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-{todayLog.map((e, i) => (
-<div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0f0f23", borderRadius: 10, padding: "10px 14px", border: "1px solid #2d2d4e" }}>
-<div><div style={{ color: "#e0e0ff", fontWeight: 600, fontSize: 14 }}>{e.name}</div><div style={{ color: "#888", fontSize: 12 }}>{e.time}</div></div>
-<div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-<span style={{ color: "#38ef7d", fontWeight: 700 }}>{e.cal} kcal</span>
-<button onClick={() => removeEntry(i)} style={{ background: "none", border: "none", color: "#ff6b6b", cursor: "pointer", fontSize: 18, padding: 0, lineHeight: 1 }}>✕</button>
-</div>
-</div>
-))}
-</div>
-<div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid #2d2d4e", display: "flex", justifyContent: "space-between" }}>
-<span style={{ color: "#9090c0", fontWeight: 600 }}>Total Eaten</span>
-<span style={{ color: "#ffd200", fontWeight: 800, fontSize: 18 }}>{consumed} kcal</span>
-</div>
-</div>
-)}
-</div>
-);
+      {todayLog.length > 0 && (
+        <div style={card}>
+          <div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>TODAY'S FOOD LOG</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {todayLog.map((e, i) => (
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0f0f23", borderRadius: 10, padding: "10px 14px", border: "1px solid #2d2d4e" }}>
+                <div><div style={{ color: "#e0e0ff", fontWeight: 600, fontSize: 14 }}>{e.name}</div><div style={{ color: "#888", fontSize: 12 }}>{e.time}</div></div>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <span style={{ color: "#38ef7d", fontWeight: 700 }}>{e.cal} kcal</span>
+                  <button onClick={() => removeEntry(i)} style={{ background: "none", border: "none", color: "#ff6b6b", cursor: "pointer", fontSize: 18, padding: 0, lineHeight: 1 }}>✕</button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid #2d2d4e", display: "flex", justifyContent: "space-between" }}>
+            <span style={{ color: "#9090c0", fontWeight: 600 }}>Total Eaten</span>
+            <span style={{ color: "#ffd200", fontWeight: 800, fontSize: 18 }}>{consumed} kcal</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 // ── ExerciseTab ──────────────────────────────────────────────────────────────
 function ExerciseTab({ profile, calorieGoal, exerciseLog, setExerciseLog, log }) {
-const [mode, setMode] = useState("preset");
-const [selectedEx, setSelectedEx] = useState(null);
-const [minutes, setMinutes] = useState("");
-const [customName, setCustomName] = useState("");
-const [customCal, setCustomCal] = useState("");
-const [aiDesc, setAiDesc] = useState("");
-const [aiLoading, setAiLoading] = useState(false);
-const [aiResult, setAiResult] = useState(null);
-const [filterCat, setFilterCat] = useState("All");
-const todayKey = new Date().toDateString();
-const todayEx = exerciseLog[todayKey] || [];
-const totalBurned = todayEx.reduce((s, e) => s + e.cal, 0);
-const consumed = (log[todayKey] || []).reduce((s, e) => s + e.cal, 0);
-const net = consumed - totalBurned;
-const remaining = calorieGoal - net;
-const weight = parseFloat(profile.weight) || 65;
-const categories = ["All", ...Array.from(new Set(EXERCISE_PRESETS.map(e => e.category)))];
-const calcCal = (met, mins) => !met || !mins ? 0 : Math.round(met * weight * (parseFloat(mins) / 60));
+  const [mode, setMode] = useState("preset");
+  const [selectedEx, setSelectedEx] = useState(null);
+  const [minutes, setMinutes] = useState("");
+  const [customName, setCustomName] = useState("");
+  const [customCal, setCustomCal] = useState("");
+  const [aiDesc, setAiDesc] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResult, setAiResult] = useState(null);
+  const [filterCat, setFilterCat] = useState("All");
+  const todayKey = new Date().toDateString();
+  const todayEx = exerciseLog[todayKey] || [];
+  const totalBurned = todayEx.reduce((s, e) => s + e.cal, 0);
+  const consumed = (log[todayKey] || []).reduce((s, e) => s + e.cal, 0);
+  const net = consumed - totalBurned;
+  const remaining = calorieGoal - net;
+  const weight = parseFloat(profile.weight) || 65;
+  const categories = ["All", ...Array.from(new Set(EXERCISE_PRESETS.map(e => e.category)))];
+  const calcCal = (met, mins) => !met || !mins ? 0 : Math.round(met * weight * (parseFloat(mins) / 60));
 
-const addEntry = (entry) => {
-const updated = { ...exerciseLog, [todayKey]: [...(exerciseLog[todayKey] || []), entry] };
-setExerciseLog(updated);
-};
+  const addEntry = (entry) => {
+    const updated = { ...exerciseLog, [todayKey]: [...(exerciseLog[todayKey] || []), entry] };
+    setExerciseLog(updated);
+  };
 
-const addPreset = () => {
-if (!selectedEx || !minutes) return;
-addEntry({ name: ${selectedEx.emoji} ${selectedEx.name}, duration: parseInt(minutes), cal: calcCal(selectedEx.met, minutes), time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) });
-setSelectedEx(null); setMinutes("");
-};
+  const addPreset = () => {
+    if (!selectedEx || !minutes) return;
+    addEntry({ name: `${selectedEx.emoji} ${selectedEx.name}`, duration: parseInt(minutes), cal: calcCal(selectedEx.met, minutes), time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) });
+    setSelectedEx(null); setMinutes("");
+  };
 
-const addCustom = () => {
-if (!customName || !customCal) return;
-addEntry({ name: ✏️ ${customName}`, duration: null, cal: parseInt(customCal), time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) });
-setCustomName(""); setCustomCal("");
-};
+  const addCustom = () => {
+    if (!customName || !customCal) return;
+    addEntry({ name: `✏️ ${customName}`, duration: null, cal: parseInt(customCal), time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) });
+    setCustomName(""); setCustomCal("");
+  };
 
-const analyzeExercise = async () => {
-if (!aiDesc) return;
-setAiLoading(true); setAiResult(null);
-try {
-const text = await callClaude(Fitness expert. Calories burned for: "${aiDesc}". Person weighs ${weight}kg. Return ONLY JSON, no markdown: {"name":"Exercise Name","calories":000,"duration_minutes":00,"notes":"brief note"}. If duration not mentioned, assume 30 min.);
-setAiResult(JSON.parse(text));
-} catch(err) {
-setAiResult({ name: aiDesc, calories: 0, duration_minutes: 30, notes: "Could not estimate. Please try again." });
-}
-setAiLoading(false);
-};
+  const analyzeExercise = async () => {
+    if (!aiDesc) return;
+    setAiLoading(true); setAiResult(null);
+    try {
+      const text = await callClaude(`Fitness expert. Calories burned for: "${aiDesc}". Person weighs ${weight}kg. Return ONLY JSON, no markdown: {"name":"Exercise Name","calories":000,"duration_minutes":00,"notes":"brief note"}. If duration not mentioned, assume 30 min.`);
+      setAiResult(JSON.parse(text));
+    } catch(err) {
+      setAiResult({ name: aiDesc, calories: 0, duration_minutes: 30, notes: "Could not estimate. Please try again." });
+    }
+    setAiLoading(false);
+  };
 
-const addAiResult = () => {
-if (!aiResult) return;
-addEntry({ name: 🤖${aiResult.name}`, duration: aiResult.duration_minutes, cal: aiResult.calories, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) });
-setAiDesc(""); setAiResult(null);
-};
+  const addAiResult = () => {
+    if (!aiResult) return;
+    addEntry({ name: `🤖 ${aiResult.name}`, duration: aiResult.duration_minutes, cal: aiResult.calories, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) });
+    setAiDesc(""); setAiResult(null);
+  };
 
-const removeEntry = (i) => setExerciseLog({ ...exerciseLog, [todayKey]: exerciseLog[todayKey].filter((_, idx) => idx !== i) });
-const filteredEx = EXERCISE_PRESETS.filter(e => filterCat === "All" || e.category === filterCat);
+  const removeEntry = (i) => setExerciseLog({ ...exerciseLog, [todayKey]: exerciseLog[todayKey].filter((_, idx) => idx !== i) });
+  const filteredEx = EXERCISE_PRESETS.filter(e => filterCat === "All" || e.category === filterCat);
 
-return (
-<div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-<div style={{ ...card, background: "linear-gradient(135deg,#1a0a2e,#0f0f23)", border: "1px solid #3d2d6e" }}>
-<div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 8 }}>
-<div>
-<div style={{ color: "#b090c0", fontSize: 12, fontWeight: 700, letterSpacing: 1 }}>CALORIES BURNED TODAY</div>
-<div style={{ fontSize: 36, fontWeight: 800, color: "#a855f7", lineHeight: 1.1 }}>{totalBurned}<span style={{ fontSize: 14, fontWeight: 400, color: "#888", marginLeft: 6 }}>kcal</span></div>
-</div>
-<div style={{ textAlign: "right" }}>
-<div style={{ color: "#9090c0", fontSize: 12 }}>Net remaining</div>
-<div style={{ color: remaining < 0 ? "#ff6b6b" : "#38ef7d", fontWeight: 800, fontSize: 18 }}>{remaining} kcal</div>
-</div>
-</div>
-{totalBurned > 0 && (
-<div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 8 }}>
-<div style={{ background: "#1a1a3e", borderRadius: 10, padding: "5px 10px", fontSize: 12, color: "#38ef7d" }}>🍽️ {consumed}</div>
-<div style={{ background: "#1a1a3e", borderRadius: 10, padding: "5px 10px", fontSize: 12, color: "#a855f7" }}>🔥 {totalBurned}</div>
-<div style={{ background: "#1a1a3e", borderRadius: 10, padding: "5px 10px", fontSize: 12, color: "#ffd200" }}>= {net} net</div>
-</div>
-)}
-</div>
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div style={{ ...card, background: "linear-gradient(135deg,#1a0a2e,#0f0f23)", border: "1px solid #3d2d6e" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 8 }}>
+          <div>
+            <div style={{ color: "#b090c0", fontSize: 12, fontWeight: 700, letterSpacing: 1 }}>CALORIES BURNED TODAY</div>
+            <div style={{ fontSize: 36, fontWeight: 800, color: "#a855f7", lineHeight: 1.1 }}>{totalBurned}<span style={{ fontSize: 14, fontWeight: 400, color: "#888", marginLeft: 6 }}>kcal</span></div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ color: "#9090c0", fontSize: 12 }}>Net remaining</div>
+            <div style={{ color: remaining < 0 ? "#ff6b6b" : "#38ef7d", fontWeight: 800, fontSize: 18 }}>{remaining} kcal</div>
+          </div>
+        </div>
+        {totalBurned > 0 && (
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 8 }}>
+            <div style={{ background: "#1a1a3e", borderRadius: 10, padding: "5px 10px", fontSize: 12, color: "#38ef7d" }}>🍽️ {consumed}</div>
+            <div style={{ background: "#1a1a3e", borderRadius: 10, padding: "5px 10px", fontSize: 12, color: "#a855f7" }}>🔥 {totalBurned}</div>
+            <div style={{ background: "#1a1a3e", borderRadius: 10, padding: "5px 10px", fontSize: 12, color: "#ffd200" }}>= {net} net</div>
+          </div>
+        )}
+      </div>
 
-<div style={{ display: "flex", gap: 8 }}>
-{[["preset","📋 Presets"],["ai","🤖 AI"],["custom","✏️ Manual"]].map(([m,label]) => (
-<button key={m} onClick={() => setMode(m)} style={{ flex: 1, padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer", fontSize: 12, fontWeight: 700, background: mode === m ? "linear-gradient(90deg,#a855f7,#7c7cff)" : "#1a1a2e", color: mode === m ? "#fff" : "#888" }}>{label}</button>
-))}
-</div>
+      <div style={{ display: "flex", gap: 8 }}>
+        {[["preset","📋 Presets"],["ai","🤖 AI"],["custom","✏️ Manual"]].map(([m,label]) => (
+          <button key={m} onClick={() => setMode(m)} style={{ flex: 1, padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer", fontSize: 12, fontWeight: 700, background: mode === m ? "linear-gradient(90deg,#a855f7,#7c7cff)" : "#1a1a2e", color: mode === m ? "#fff" : "#888" }}>{label}</button>
+        ))}
+      </div>
 
-{mode === "preset" && (
-<div style={card}>
-<div style={{ color: "#a855f7", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 12 }}>SELECT EXERCISE</div>
-<div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
-{categories.map(cat => (
-<button key={cat} onClick={() => setFilterCat(cat)} style={{ padding: "4px 10px", borderRadius: 20, border: "none", cursor: "pointer", fontSize: 11, fontWeight: 600, background: filterCat === cat ? "#a855f7" : "#1a1a2e", color: filterCat === cat ? "#fff" : "#888" }}>{cat}</button>
-))}
-</div>
-<div style={{ display: "flex", flexDirection: "column", gap: 6, maxHeight: 240, overflowY: "auto" }}>
-{filteredEx.map((ex, i) => (
-<button key={i} onClick={() => setSelectedEx(ex)} style={{ background: selectedEx?.name === ex.name ? "linear-gradient(90deg,#a855f722,#7c7cff11)" : "transparent", border: selectedEx?.name === ex.name ? "1px solid #a855f7" : "1px solid #2d2d4e", borderRadius: 10, padding: "10px 14px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", color: selectedEx?.name === ex.name ? "#e0e0ff" : "#aaa" }}>
-<span style={{ fontWeight: 600, fontSize: 13 }}>{ex.emoji} {ex.name}</span>
-<span style={{ fontSize: 11, color: "#666" }}>{calcCal(ex.met, 30)} kcal/30min</span>
-</button>
-))}
-</div>
-{selectedEx && (
-<div style={{ marginTop: 14, display: "flex", gap: 10, alignItems: "center" }}>
-<div style={{ flex: 1 }}>
-<div style={{ color: "#9090c0", fontSize: 12, marginBottom: 4 }}>Duration (minutes)</div>
-<input style={inp} type="number" value={minutes} onChange={e => setMinutes(e.target.value)} placeholder="e.g. 30" />
-</div>
-{minutes && <div style={{ textAlign: "center", minWidth: 70 }}><div style={{ color: "#a855f7", fontWeight: 800, fontSize: 22 }}>{calcCal(selectedEx.met, minutes)}</div><div style={{ color: "#666", fontSize: 11 }}>kcal</div></div>}
-</div>
-)}
-{selectedEx && minutes && (
-<button onClick={addPreset} style={{ width: "100%", marginTop: 12, background: "linear-gradient(90deg,#a855f7,#7c7cff)", border: "none", borderRadius: 10, padding: "12px", color: "#fff", fontWeight: 700, cursor: "pointer", fontSize: 15 }}>
-+ Log {calcCal(selectedEx.met, minutes)} kcal Burned
-</button>
-)}
-</div>
-)}
+      {mode === "preset" && (
+        <div style={card}>
+          <div style={{ color: "#a855f7", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 12 }}>SELECT EXERCISE</div>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+            {categories.map(cat => (
+              <button key={cat} onClick={() => setFilterCat(cat)} style={{ padding: "4px 10px", borderRadius: 20, border: "none", cursor: "pointer", fontSize: 11, fontWeight: 600, background: filterCat === cat ? "#a855f7" : "#1a1a2e", color: filterCat === cat ? "#fff" : "#888" }}>{cat}</button>
+            ))}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, maxHeight: 240, overflowY: "auto" }}>
+            {filteredEx.map((ex, i) => (
+              <button key={i} onClick={() => setSelectedEx(ex)} style={{ background: selectedEx?.name === ex.name ? "linear-gradient(90deg,#a855f722,#7c7cff11)" : "transparent", border: selectedEx?.name === ex.name ? "1px solid #a855f7" : "1px solid #2d2d4e", borderRadius: 10, padding: "10px 14px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", color: selectedEx?.name === ex.name ? "#e0e0ff" : "#aaa" }}>
+                <span style={{ fontWeight: 600, fontSize: 13 }}>{ex.emoji} {ex.name}</span>
+                <span style={{ fontSize: 11, color: "#666" }}>{calcCal(ex.met, 30)} kcal/30min</span>
+              </button>
+            ))}
+          </div>
+          {selectedEx && (
+            <div style={{ marginTop: 14, display: "flex", gap: 10, alignItems: "center" }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ color: "#9090c0", fontSize: 12, marginBottom: 4 }}>Duration (minutes)</div>
+                <input style={inp} type="number" value={minutes} onChange={e => setMinutes(e.target.value)} placeholder="e.g. 30" />
+              </div>
+              {minutes && <div style={{ textAlign: "center", minWidth: 70 }}><div style={{ color: "#a855f7", fontWeight: 800, fontSize: 22 }}>{calcCal(selectedEx.met, minutes)}</div><div style={{ color: "#666", fontSize: 11 }}>kcal</div></div>}
+            </div>
+          )}
+          {selectedEx && minutes && (
+            <button onClick={addPreset} style={{ width: "100%", marginTop: 12, background: "linear-gradient(90deg,#a855f7,#7c7cff)", border: "none", borderRadius: 10, padding: "12px", color: "#fff", fontWeight: 700, cursor: "pointer", fontSize: 15 }}>
+              + Log {calcCal(selectedEx.met, minutes)} kcal Burned
+            </button>
+          )}
+        </div>
+      )}
 
-{mode === "ai" && (
-<div style={card}>
-<div style={{ color: "#a855f7", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>AI CALORIE ESTIMATOR</div>
-<textarea style={{ ...inp, minHeight: 70, resize: "vertical" }} placeholder="Describe your workout... e.g. 'Ran 5km in 35 minutes'" value={aiDesc} onChange={e => setAiDesc(e.target.value)} />
-<button onClick={analyzeExercise} disabled={aiLoading || !aiDesc} style={{ width: "100%", marginTop: 10, background: !aiDesc ? "#2d2d4e" : "linear-gradient(90deg,#a855f7,#7c7cff)", border: "none", borderRadius: 10, padding: "12px", color: !aiDesc ? "#666" : "#fff", fontWeight: 700, cursor: "pointer", fontSize: 14 }}>
-{aiLoading ? "Estimating…" : "🤖 Estimate Calories Burned"}
-</button>
-{aiResult && (
-<div style={{ background: "#0a0a1a", borderRadius: 12, padding: 16, marginTop: 14, border: "1px solid #a855f744" }}>
-<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-<div><div style={{ color: "#e0e0ff", fontWeight: 700, fontSize: 16 }}>{aiResult.name}</div><div style={{ color: "#888", fontSize: 12, marginTop: 2 }}>{aiResult.duration_minutes} min · {aiResult.notes}</div></div>
-<div style={{ textAlign: "right" }}><div style={{ color: "#a855f7", fontWeight: 800, fontSize: 26 }}>{aiResult.calories}</div><div style={{ color: "#888", fontSize: 11 }}>kcal burned</div></div>
-</div>
-<button onClick={addAiResult} style={{ width: "100%", marginTop: 12, background: "linear-gradient(90deg,#a855f7,#7c7cff)", border: "none", borderRadius: 10, padding: "10px", color: "#fff", fontWeight: 700, cursor: "pointer" }}>+ Log Exercise</button>
-</div>
-)}
-</div>
-)}
+      {mode === "ai" && (
+        <div style={card}>
+          <div style={{ color: "#a855f7", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>AI CALORIE ESTIMATOR</div>
+          <textarea style={{ ...inp, minHeight: 70, resize: "vertical" }} placeholder="Describe your workout... e.g. 'Ran 5km in 35 minutes'" value={aiDesc} onChange={e => setAiDesc(e.target.value)} />
+          <button onClick={analyzeExercise} disabled={aiLoading || !aiDesc} style={{ width: "100%", marginTop: 10, background: !aiDesc ? "#2d2d4e" : "linear-gradient(90deg,#a855f7,#7c7cff)", border: "none", borderRadius: 10, padding: "12px", color: !aiDesc ? "#666" : "#fff", fontWeight: 700, cursor: "pointer", fontSize: 14 }}>
+            {aiLoading ? "Estimating…" : "🤖 Estimate Calories Burned"}
+          </button>
+          {aiResult && (
+            <div style={{ background: "#0a0a1a", borderRadius: 12, padding: 16, marginTop: 14, border: "1px solid #a855f744" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div><div style={{ color: "#e0e0ff", fontWeight: 700, fontSize: 16 }}>{aiResult.name}</div><div style={{ color: "#888", fontSize: 12, marginTop: 2 }}>{aiResult.duration_minutes} min · {aiResult.notes}</div></div>
+                <div style={{ textAlign: "right" }}><div style={{ color: "#a855f7", fontWeight: 800, fontSize: 26 }}>{aiResult.calories}</div><div style={{ color: "#888", fontSize: 11 }}>kcal burned</div></div>
+              </div>
+              <button onClick={addAiResult} style={{ width: "100%", marginTop: 12, background: "linear-gradient(90deg,#a855f7,#7c7cff)", border: "none", borderRadius: 10, padding: "10px", color: "#fff", fontWeight: 700, cursor: "pointer" }}>+ Log Exercise</button>
+            </div>
+          )}
+        </div>
+      )}
 
-{mode === "custom" && (
-<div style={card}>
-<div style={{ color: "#a855f7", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>MANUAL ENTRY</div>
-<div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-<div><div style={{ color: "#9090c0", fontSize: 12, marginBottom: 4 }}>Exercise Name</div><input style={inp} value={customName} onChange={e => setCustomName(e.target.value)} placeholder="e.g. Morning yoga" /></div>
-<div><div style={{ color: "#9090c0", fontSize: 12, marginBottom: 4 }}>Calories Burned</div><input style={inp} type="number" value={customCal} onChange={e => setCustomCal(e.target.value)} placeholder="e.g. 250" /></div>
-</div>
-<button onClick={addCustom} disabled={!customName || !customCal} style={{ width: "100%", marginTop: 14, background: (!customName || !customCal) ? "#2d2d4e" : "linear-gradient(90deg,#a855f7,#7c7cff)", border: "none", borderRadius: 10, padding: "12px", color: (!customName || !customCal) ? "#666" : "#fff", fontWeight: 700, cursor: "pointer" }}>+ Log Exercise</button>
-</div>
-)}
+      {mode === "custom" && (
+        <div style={card}>
+          <div style={{ color: "#a855f7", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>MANUAL ENTRY</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div><div style={{ color: "#9090c0", fontSize: 12, marginBottom: 4 }}>Exercise Name</div><input style={inp} value={customName} onChange={e => setCustomName(e.target.value)} placeholder="e.g. Morning yoga" /></div>
+            <div><div style={{ color: "#9090c0", fontSize: 12, marginBottom: 4 }}>Calories Burned</div><input style={inp} type="number" value={customCal} onChange={e => setCustomCal(e.target.value)} placeholder="e.g. 250" /></div>
+          </div>
+          <button onClick={addCustom} disabled={!customName || !customCal} style={{ width: "100%", marginTop: 14, background: (!customName || !customCal) ? "#2d2d4e" : "linear-gradient(90deg,#a855f7,#7c7cff)", border: "none", borderRadius: 10, padding: "12px", color: (!customName || !customCal) ? "#666" : "#fff", fontWeight: 700, cursor: "pointer" }}>+ Log Exercise</button>
+        </div>
+      )}
 
-{todayEx.length > 0 && (
-<div style={card}>
-<div style={{ color: "#a855f7", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>TODAY'S EXERCISE LOG</div>
-<div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-{todayEx.map((e, i) => (
-<div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0f0f23", borderRadius: 10, padding: "10px 14px", border: "1px solid #2d2d4e" }}>
-<div><div style={{ color: "#e0e0ff", fontWeight: 600, fontSize: 14 }}>{e.name}</div><div style={{ color: "#888", fontSize: 12 }}>{e.time}{e.duration ? · ${e.duration} min` : ""}</div></div>
-<div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-<span style={{ color: "#a855f7", fontWeight: 700 }}>-{e.cal} kcal</span>
-<button onClick={() => removeEntry(i)} style={{ background: "none", border: "none", color: "#ff6b6b", cursor: "pointer", fontSize: 18, padding: 0, lineHeight: 1 }}>✕</button>
-</div>
-</div>
-))}
-</div>
-<div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid #2d2d4e", display: "flex", justifyContent: "space-between" }}>
-<span style={{ color: "#9090c0", fontWeight: 600 }}>Total Burned</span>
-<span style={{ color: "#a855f7", fontWeight: 800, fontSize: 18 }}>{totalBurned} kcal</span>
-</div>
-</div>
-)}
-</div>
-);
+      {todayEx.length > 0 && (
+        <div style={card}>
+          <div style={{ color: "#a855f7", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>TODAY'S EXERCISE LOG</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {todayEx.map((e, i) => (
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0f0f23", borderRadius: 10, padding: "10px 14px", border: "1px solid #2d2d4e" }}>
+                <div><div style={{ color: "#e0e0ff", fontWeight: 600, fontSize: 14 }}>{e.name}</div><div style={{ color: "#888", fontSize: 12 }}>{e.time}{e.duration ? ` · ${e.duration} min` : ""}</div></div>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <span style={{ color: "#a855f7", fontWeight: 700 }}>-{e.cal} kcal</span>
+                  <button onClick={() => removeEntry(i)} style={{ background: "none", border: "none", color: "#ff6b6b", cursor: "pointer", fontSize: 18, padding: 0, lineHeight: 1 }}>✕</button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid #2d2d4e", display: "flex", justifyContent: "space-between" }}>
+            <span style={{ color: "#9090c0", fontWeight: 600 }}>Total Burned</span>
+            <span style={{ color: "#a855f7", fontWeight: 800, fontSize: 18 }}>{totalBurned} kcal</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 // ── SuggestionsTab ───────────────────────────────────────────────────────────
 function SuggestionsTab({ calorieGoal, log, setLog, exerciseLog }) {
-const [search, setSearch] = useState("");
-const [aiSuggest, setAiSuggest] = useState([]);
-const [aiLoading, setAiLoading] = useState(false);
-const todayKey = new Date().toDateString();
-const consumed = (log[todayKey] || []).reduce((s, e) => s + e.cal, 0);
-const burned = (exerciseLog[todayKey] || []).reduce((s, e) => s + e.cal, 0);
-const remaining = calorieGoal - (consumed - burned);
-const filtered = FILIPINO_FOODS.filter(f => f.name.toLowerCase().includes(search.toLowerCase()));
+  const [search, setSearch] = useState("");
+  const [aiSuggest, setAiSuggest] = useState([]);
+  const [aiLoading, setAiLoading] = useState(false);
+  const todayKey = new Date().toDateString();
+  const consumed = (log[todayKey] || []).reduce((s, e) => s + e.cal, 0);
+  const burned = (exerciseLog[todayKey] || []).reduce((s, e) => s + e.cal, 0);
+  const remaining = calorieGoal - (consumed - burned);
+  const filtered = FILIPINO_FOODS.filter(f => f.name.toLowerCase().includes(search.toLowerCase()));
 
-const addFood = (f) => {
-const entry = { name: f.name, cal: f.cal, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) };
-setLog(prev => ({ ...prev, [todayKey]: [...(prev[todayKey] || []), entry] }));
-};
+  const addFood = (f) => {
+    const entry = { name: f.name, cal: f.cal, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) };
+    setLog(prev => ({ ...prev, [todayKey]: [...(prev[todayKey] || []), entry] }));
+  };
 
-const getAiSuggestions = async () => {
-setAiLoading(true); setAiSuggest([]);
-try {
-const text = await callClaude(Filipino nutrition expert. User has${remaining} net calories remaining (goal: {consumed}, burned:${burned}). Suggest 5 Filipino foods. Return ONLY JSON array, no markdown: [{"name":"Food Name","calories":000,"per":"serving size","tip":"brief tip"}]);
-setAiSuggest(JSON.parse(text));
-} catch(err) {
-setAiSuggest([]);
-}
-setAiLoading(false);
-};
+  const getAiSuggestions = async () => {
+    setAiLoading(true); setAiSuggest([]);
+    try {
+      const text = await callClaude(`Filipino nutrition expert. User has ${remaining} net calories remaining (goal:${calorieGoal}, eaten:${consumed}, burned:${burned}). Suggest 5 Filipino foods. Return ONLY JSON array, no markdown: [{"name":"Food Name","calories":000,"per":"serving size","tip":"brief tip"}]`);
+      setAiSuggest(JSON.parse(text));
+    } catch(err) {
+      setAiSuggest([]);
+    }
+    setAiLoading(false);
+  };
 
-return (
-<div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-<div style={{ background: "linear-gradient(90deg,#7c7cff22,#38ef7d11)", borderRadius: 14, padding: 16, border: "1px solid #7c7cff44", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-<div>
-<div style={{ color: "#9090c0", fontSize: 12, fontWeight: 700 }}>NET REMAINING</div>
-<div style={{ color: remaining < 0 ? "#ff6b6b" : "#38ef7d", fontWeight: 800, fontSize: 24 }}>{remaining} kcal</div>
-{burned > 0 && <div style={{ color: "#a855f7", fontSize: 11, marginTop: 2 }}>+{burned} kcal from exercise</div>}
-</div>
-<button onClick={getAiSuggestions} disabled={aiLoading} style={{ background: "linear-gradient(90deg,#7c7cff,#38ef7d)", border: "none", borderRadius: 10, padding: "10px 16px", color: "#0a0a1a", fontWeight: 700, cursor: "pointer", fontSize: 13 }}>{aiLoading ? "…" : "✨ AI Suggest"}</button>
-</div>
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div style={{ background: "linear-gradient(90deg,#7c7cff22,#38ef7d11)", borderRadius: 14, padding: 16, border: "1px solid #7c7cff44", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          <div style={{ color: "#9090c0", fontSize: 12, fontWeight: 700 }}>NET REMAINING</div>
+          <div style={{ color: remaining < 0 ? "#ff6b6b" : "#38ef7d", fontWeight: 800, fontSize: 24 }}>{remaining} kcal</div>
+          {burned > 0 && <div style={{ color: "#a855f7", fontSize: 11, marginTop: 2 }}>+{burned} kcal from exercise</div>}
+        </div>
+        <button onClick={getAiSuggestions} disabled={aiLoading} style={{ background: "linear-gradient(90deg,#7c7cff,#38ef7d)", border: "none", borderRadius: 10, padding: "10px 16px", color: "#0a0a1a", fontWeight: 700, cursor: "pointer", fontSize: 13 }}>{aiLoading ? "…" : "✨ AI Suggest"}</button>
+      </div>
 
-{aiSuggest.length > 0 && (
-<div style={card}>
-<div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>✨ AI PICKS FOR YOU</div>
-<div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-{aiSuggest.map((f, i) => (
-<div key={i} style={{ background: "#0a0a1a", borderRadius: 12, padding: 14, border: "1px solid #2d2d4e" }}>
-<div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-<div style={{ flex: 1 }}><div style={{ color: "#e0e0ff", fontWeight: 700 }}>{f.name}</div><div style={{ color: "#888", fontSize: 12, marginTop: 2 }}>{f.per} · {f.tip}</div></div>
-<div style={{ display: "flex", alignItems: "center", gap: 10, marginLeft: 12 }}>
-<span style={{ color: "#38ef7d", fontWeight: 700 }}>{f.calories}</span>
-<button onClick={() => addFood({ name: f.name, cal: f.calories })} style={{ background: "#7c7cff", border: "none", borderRadius: 8, padding: "5px 10px", color: "#fff", fontWeight: 700, cursor: "pointer", fontSize: 13 }}>+</button>
-</div>
-</div>
-</div>
-))}
-</div>
-</div>
-)}
+      {aiSuggest.length > 0 && (
+        <div style={card}>
+          <div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>✨ AI PICKS FOR YOU</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {aiSuggest.map((f, i) => (
+              <div key={i} style={{ background: "#0a0a1a", borderRadius: 12, padding: 14, border: "1px solid #2d2d4e" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                  <div style={{ flex: 1 }}><div style={{ color: "#e0e0ff", fontWeight: 700 }}>{f.name}</div><div style={{ color: "#888", fontSize: 12, marginTop: 2 }}>{f.per} · {f.tip}</div></div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginLeft: 12 }}>
+                    <span style={{ color: "#38ef7d", fontWeight: 700 }}>{f.calories}</span>
+                    <button onClick={() => addFood({ name: f.name, cal: f.calories })} style={{ background: "#7c7cff", border: "none", borderRadius: 8, padding: "5px 10px", color: "#fff", fontWeight: 700, cursor: "pointer", fontSize: 13 }}>+</button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
-<div style={card}>
-<div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>🇵🇭 FILIPINO FOOD DATABASE</div>
-<input style={{ ...inp, marginBottom: 12 }} placeholder="Search Filipino foods…" value={search} onChange={e => setSearch(e.target.value)} />
-<div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 360, overflowY: "auto" }}>
-{filtered.map((f, i) => (
-<div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0f0f23", borderRadius: 10, padding: "10px 14px", border: "1px solid #2d2d4e" }}>
-<div><div style={{ color: "#e0e0ff", fontWeight: 600, fontSize: 14 }}>{f.name}</div><div style={{ color: "#888", fontSize: 12 }}>{f.per}</div></div>
-<div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-<span style={{ color: "#38ef7d", fontWeight: 700 }}>{f.cal}</span>
-<button onClick={() => addFood(f)} style={{ background: "#7c7cff", border: "none", borderRadius: 8, padding: "5px 10px", color: "#fff", fontWeight: 700, cursor: "pointer", fontSize: 13 }}>+</button>
-</div>
-</div>
-))}
-</div>
-</div>
-</div>
-);
+      <div style={card}>
+        <div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>🇵🇭 FILIPINO FOOD DATABASE</div>
+        <input style={{ ...inp, marginBottom: 12 }} placeholder="Search Filipino foods…" value={search} onChange={e => setSearch(e.target.value)} />
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 360, overflowY: "auto" }}>
+          {filtered.map((f, i) => (
+            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0f0f23", borderRadius: 10, padding: "10px 14px", border: "1px solid #2d2d4e" }}>
+              <div><div style={{ color: "#e0e0ff", fontWeight: 600, fontSize: 14 }}>{f.name}</div><div style={{ color: "#888", fontSize: 12 }}>{f.per}</div></div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ color: "#38ef7d", fontWeight: 700 }}>{f.cal}</span>
+                <button onClick={() => addFood(f)} style={{ background: "#7c7cff", border: "none", borderRadius: 8, padding: "5px 10px", color: "#fff", fontWeight: 700, cursor: "pointer", fontSize: 13 }}>+</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 // ── SummaryTab ───────────────────────────────────────────────────────────────
 function SummaryTab({ profile, calorieGoal, log, exerciseLog }) {
-const w = parseFloat(profile.weight), h = parseFloat(profile.height), a = parseFloat(profile.age), tw = parseFloat(profile.targetWeight), wks = parseFloat(profile.weeks);
-const bmr = profile.sex === "male" ? 10w + 6.25h - 5a + 5 : 10w + 6.25h - 5a - 161;
-const tdee = bmr * parseFloat(profile.activity);
-const deficit = ((w - tw) * 7700) / (wks * 7);
-const bmi = w / ((h/100)**2);
-const bmiLabel = bmi < 18.5 ? "Underweight" : bmi < 25 ? "Normal" : bmi < 30 ? "Overweight" : "Obese";
-const today = new Date().toDateString();
-const todayConsumed = (log[today] || []).reduce((s,e) => s+e.cal, 0);
-const todayBurned = (exerciseLog[today] || []).reduce((s,e) => s+e.cal, 0);
-const last7 = Array.from({ length: 7 }, (_, i) => {
-const d = new Date(); d.setDate(d.getDate() - (6-i));
-const k = d.toDateString();
-const cal = (log[k] || []).reduce((s,e) => s+e.cal, 0);
-const burned = (exerciseLog[k] || []).reduce((s,e) => s+e.cal, 0);
-return { day: d.toLocaleDateString([], { weekday: "short" }), cal, burned, net: cal-burned };
-});
-const SC = ({ label, value, unit, color }) => (
-<div style={{ background: "#0f0f23", borderRadius: 14, padding: 14, border: "1px solid #2d2d4e", textAlign: "center" }}>
-<div style={{ color: "#888", fontSize: 10, fontWeight: 700, letterSpacing: 1, marginBottom: 4 }}>{label}</div>
-<div style={{ color: color || "#e0e0ff", fontWeight: 800, fontSize: 20 }}>{value}</div>
-<div style={{ color: "#666", fontSize: 10 }}>{unit}</div>
-</div>
-);
-const maxBar = Math.max(...last7.map(d => d.cal), calorieGoal, 1);
-return (
-<div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-<div style={card}>
-<div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>CALORIE TARGETS</div>
-<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-<SC label="BMR" value={Math.round(bmr)} unit="base kcal/day" color="#9090c0" />
-<SC label="TDEE" value={Math.round(tdee)} unit="maintenance" color="#7c7cff" />
-<SC label="DAILY GOAL" value={calorieGoal} unit="kcal target" color="#38ef7d" />
-<SC label="NET TODAY" value={todayConsumed - todayBurned} unit="kc
+  const w = parseFloat(profile.weight), h = parseFloat(profile.height), a = parseFloat(profile.age), tw = parseFloat(profile.targetWeight), wks = parseFloat(profile.weeks);
+  const bmr = profile.sex === "male" ? 10*w + 6.25*h - 5*a + 5 : 10*w + 6.25*h - 5*a - 161;
+  const tdee = bmr * parseFloat(profile.activity);
+  const deficit = ((w - tw) * 7700) / (wks * 7);
+  const bmi = w / ((h/100)**2);
+  const bmiLabel = bmi < 18.5 ? "Underweight" : bmi < 25 ? "Normal" : bmi < 30 ? "Overweight" : "Obese";
+  const today = new Date().toDateString();
+  const todayConsumed = (log[today] || []).reduce((s,e) => s+e.cal, 0);
+  const todayBurned = (exerciseLog[today] || []).reduce((s,e) => s+e.cal, 0);
+  const last7 = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(); d.setDate(d.getDate() - (6-i));
+    const k = d.toDateString();
+    const cal = (log[k] || []).reduce((s,e) => s+e.cal, 0);
+    const burned = (exerciseLog[k] || []).reduce((s,e) => s+e.cal, 0);
+    return { day: d.toLocaleDateString([], { weekday: "short" }), cal, burned, net: cal-burned };
+  });
+  const SC = ({ label, value, unit, color }) => (
+    <div style={{ background: "#0f0f23", borderRadius: 14, padding: 14, border: "1px solid #2d2d4e", textAlign: "center" }}>
+      <div style={{ color: "#888", fontSize: 10, fontWeight: 700, letterSpacing: 1, marginBottom: 4 }}>{label}</div>
+      <div style={{ color: color || "#e0e0ff", fontWeight: 800, fontSize: 20 }}>{value}</div>
+      <div style={{ color: "#666", fontSize: 10 }}>{unit}</div>
+    </div>
+  );
+  const maxBar = Math.max(...last7.map(d => d.cal), calorieGoal, 1);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div style={card}>
+        <div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>CALORIE TARGETS</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <SC label="BMR" value={Math.round(bmr)} unit="base kcal/day" color="#9090c0" />
+          <SC label="TDEE" value={Math.round(tdee)} unit="maintenance" color="#7c7cff" />
+          <SC label="DAILY GOAL" value={calorieGoal} unit="kcal target" color="#38ef7d" />
+          <SC label="NET TODAY" value={todayConsumed - todayBurned} unit="kcal net" color={(todayConsumed-todayBurned) > calorieGoal ? "#ff6b6b" : "#ffd200"} />
+        </div>
+      </div>
+      <div style={card}>
+        <div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>TODAY AT A GLANCE</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+          <SC label="EATEN" value={todayConsumed} unit="kcal" color="#38ef7d" />
+          <SC label="BURNED" value={todayBurned} unit="kcal" color="#a855f7" />
+          <SC label="NET" value={todayConsumed - todayBurned} unit="kcal" color={(todayConsumed-todayBurned) > calorieGoal ? "#ff6b6b" : "#ffd200"} />
+        </div>
+      </div>
+      <div style={card}>
+        <div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>BODY STATS</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+          <SC label="BMI" value={bmi.toFixed(1)} unit={bmiLabel} color={bmi < 25 ? "#38ef7d" : "#ffd200"} />
+          <SC label="GOAL Δ" value={`${(tw-w)>0?"+":""}${(tw-w).toFixed(1)}`} unit="kg" color={(tw-w)<0?"#38ef7d":"#ff6b6b"} />
+          <SC label="DEFICIT" value={deficit>0?`-${Math.round(deficit)}`:`+${Math.round(Math.abs(deficit))}`} unit="kcal/day" color="#7c7cff" />
+        </div>
+      </div>
+      <div style={card}>
+        <div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 16 }}>7-DAY OVERVIEW</div>
+        <div style={{ display: "flex", alignItems: "flex-end", gap: 8, height: 100 }}>
+          {last7.map((d, i) => (
+            <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+              <div style={{ fontSize: 10, color: "#888" }}>{d.net > 0 ? d.net : ""}</div>
+              <div style={{ width: "100%", position: "relative" }}>
+                <div style={{ width: "100%", borderRadius: "6px 6px 0 0", height: `${(d.cal/maxBar)*80}px`, minHeight: d.cal>0?4:0, background: d.net>calorieGoal?"linear-gradient(180deg,#ff6b6b,#ff444488)":"linear-gradient(180deg,#38ef7d,#11998e88)", transition: "height 0.5s" }} />
+                {d.burned>0 && <div style={{ position: "absolute", bottom: 0, width: "100%", height: `${(d.burned/maxBar)*80}px`, background: "linear-gradient(180deg,#a855f7aa,#7c7cff44)", borderRadius: 6 }} />}
+              </div>
+              <div style={{ fontSize: 11, color: "#888" }}>{d.day}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ display: "flex", gap: 12, marginTop: 10, flexWrap: "wrap" }}>
+          {[["#38ef7d","Food"],["#a855f7","Exercise"],["#ff6b6b","Over goal"]].map(([color,label]) => (
+            <div key={label} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <div style={{ width: 12, height: 4, borderRadius: 2, background: color }} />
+              <span style={{ color: "#888", fontSize: 11 }}>{label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── App ──────────────────────────────────────────────────────────────────────
+function App() {
+  const [ready, setReady] = useState(false);
+  const [tab, setTab] = useState(0);
+  const [log, setLogRaw] = useState({});
+  const [exerciseLog, setExerciseLogRaw] = useState({});
+  const [profile, setProfileRaw] = useState(DEFAULT_PROFILE);
+  const [calorieGoal, setCalorieGoalRaw] = useState(null);
+
+  useEffect(() => {
+    const p = load("kt-profile", DEFAULT_PROFILE);
+    const g = load("kt-goal", null);
+    const l = load("kt-log", {});
+    const el = load("kt-exlog", {});
+    setProfileRaw(p); setCalorieGoalRaw(g); setLogRaw(l); setExerciseLogRaw(el);
+    setReady(true);
+    if (g) setTab(1);
+  }, []);
+
+  const setLog = useCallback((updater) => {
+    setLogRaw(prev => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      save("kt-log", next); return next;
+    });
+  }, []);
+
+  const setExerciseLog = useCallback((updater) => {
+    setExerciseLogRaw(prev => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      save("kt-exlog", next); return next;
+    });
+  }, []);
+
+  const setProfile = useCallback((p) => { setProfileRaw(p); save("kt-profile", p); }, []);
+
+  const calculateGoal = useCallback((p) => {
+    const w=parseFloat(p.weight), h=parseFloat(p.height), a=parseFloat(p.age), tw=parseFloat(p.targetWeight), wks=parseFloat(p.weeks);
+    if (!w||!h||!a||!tw||!wks) return;
+    const bmr = p.sex==="male" ? 10*w+6.25*h-5*a+5 : 10*w+6.25*h-5*a-161;
+    const goal = Math.max(Math.round(bmr*p.activity - ((w-tw)*7700)/(wks*7)), 1200);
+    setCalorieGoalRaw(goal); save("kt-goal", goal); setTab(1);
+  }, []);
+
+  const todayKey = new Date().toDateString();
+  const todayBurned = (exerciseLog[todayKey] || []).reduce((s,e) => s+e.cal, 0);
+  const tabs = ["⚙️","🍽️","🏋️","🇵🇭","📊"];
+  const tabLabels = ["Setup","Food","Exercise","Suggest","Summary"];
+
+  const noGoal = (
+    <div style={{ textAlign: "center", padding: 60, color: "#888" }}>
+      <div style={{ fontSize: 48 }}>⚙️</div>
+      <div style={{ marginTop: 12 }}>Set up your profile first</div>
+      <button onClick={() => setTab(0)} style={{ marginTop: 16, background: "linear-gradient(90deg,#7c7cff,#38ef7d)", border: "none", borderRadius: 10, padding: "10px 24px", color: "#0a0a1a", fontWeight: 700, cursor: "pointer" }}>Go to Setup</button>
+    </div>
+  );
+
+  const [unlocked, setUnlocked] = useState(() => !!load("kt-unlocked", false));
+
+  if (!ready) return (
+    <div style={{ minHeight: "100vh", background: "#0a0a1a", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16 }}>
+      <div style={{ fontSize: 48 }}>🍚</div>
+      <div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 18 }}>Loading KainTrack…</div>
+    </div>
+  );
+
+  if (!unlocked) return <PasswordScreen onUnlock={() => setUnlocked(true)} />;
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#0a0a1a", paddingBottom: 72 }}>
+      {/* Header */}
+      <div style={{ background: "linear-gradient(135deg,#12122b,#0a0a1a)", padding: "14px 20px 12px", borderBottom: "1px solid #2d2d4e", position: "sticky", top: 0, zIndex: 10 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: -0.5 }}>
+              <span style={{ background: "linear-gradient(90deg,#7c7cff,#38ef7d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Kain</span>
+              <span style={{ color: "#e0e0ff" }}>Track</span>
+            </div>
+            <div style={{ color: "#666", fontSize: 10 }}>Filipino Calorie Tracker · saved ✓</div>
+          </div>
+          {calorieGoal && (
+            <div style={{ display: "flex", gap: 8 }}>
+              <div style={{ background: "#1a1a3e", borderRadius: 10, padding: "5px 10px", border: "1px solid #2d2d4e", textAlign: "center" }}>
+                <div style={{ color: "#888", fontSize: 9 }}>GOAL</div>
+                <div style={{ color: "#38ef7d", fontWeight: 800, fontSize: 15 }}>{calorieGoal}</div>
+              </div>
+              {todayBurned > 0 && (
+                <div style={{ background: "#1a0a2e", borderRadius: 10, padding: "5px 10px", border: "1px solid #3d2d6e", textAlign: "center" }}>
+                  <div style={{ color: "#888", fontSize: 9 }}>BURNED</div>
+                  <div style={{ color: "#a855f7", fontWeight: 800, fontSize: 15 }}>{todayBurned}</div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div style={{ padding: "20px 16px" }}>
+        {tab===0 && <SetupTab profile={profile} setProfile={setProfile} onSave={calculateGoal} />}
+        {tab===1 && (calorieGoal ? <LogFoodTab calorieGoal={calorieGoal} log={log} setLog={setLog} exerciseLog={exerciseLog} /> : noGoal)}
+        {tab===2 && (calorieGoal ? <ExerciseTab profile={profile} calorieGoal={calorieGoal} exerciseLog={exerciseLog} setExerciseLog={setExerciseLog} log={log} /> : noGoal)}
+        {tab===3 && (calorieGoal ? <SuggestionsTab calorieGoal={calorieGoal} log={log} setLog={setLog} exerciseLog={exerciseLog} /> : noGoal)}
+        {tab===4 && (calorieGoal ? <SummaryTab profile={profile} calorieGoal={calorieGoal} log={log} exerciseLog={exerciseLog} /> : noGoal)}
+      </div>
+
+      {/* Bottom Nav */}
+      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#0f0f23", borderTop: "1px solid #2d2d4e", display: "flex", padding: "8px 0 env(safe-area-inset-bottom, 8px)" }}>
+        {tabs.map((emoji, i) => (
+          <button key={i} onClick={() => setTab(i)} style={{ flex: 1, background: "none", border: "none", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "4px 0" }}>
+            <span style={{ fontSize: 18 }}>{emoji}</span>
+            <span style={{ fontSize: 9, fontWeight: 600, color: tab===i ? "#7c7cff" : "#555" }}>{tabLabels[i]}</span>
+            {tab===i && <div style={{ width: 18, height: 2, background: i===2 ? "#a855f7" : "#7c7cff", borderRadius: 2 }} />}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
