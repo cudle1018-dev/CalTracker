@@ -102,25 +102,79 @@ const inp = { background: "#0f0f23", border: "1px solid #2d2d4e", borderRadius: 
 const lbl = { color: "#9090c0", fontSize: 13, marginBottom: 4, display: "block", fontWeight: 600, letterSpacing: 0.5 };
 const card = { background: "linear-gradient(135deg,#1a1a3e,#0f0f23)", borderRadius: 16, padding: 20, border: "1px solid #2d2d4e" };
 
-// ── API call helper ──────────────────────────────────────────────────────────
+// ── API key helpers ──────────────────────────────────────────────────────────
+function getApiKey() { return localStorage.getItem("kt-apikey") || ""; }
+function setApiKey(k) { localStorage.setItem("kt-apikey", k.trim()); }
+
 async function callClaude(prompt) {
+  const key = getApiKey();
+  if (!key) throw new Error("NO_KEY");
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
     body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, messages: [{ role: "user", content: prompt }] })
   });
   const data = await res.json();
+  if (data.error) throw new Error(data.error.message);
   return data.content.map(i => i.text || "").join("").replace(/```json|```/g, "").trim();
 }
 
 async function callClaudeWithImage(base64, prompt) {
+  const key = getApiKey();
+  if (!key) throw new Error("NO_KEY");
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
     body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, messages: [{ role: "user", content: [{ type: "image", source: { type: "base64", media_type: "image/jpeg", data: base64 } }, { type: "text", text: prompt }] }] })
   });
   const data = await res.json();
+  if (data.error) throw new Error(data.error.message);
   return data.content.map(i => i.text || "").join("").replace(/```json|```/g, "").trim();
+}
+
+// ── ApiKeyBanner ─────────────────────────────────────────────────────────────
+function ApiKeyBanner({ onSaved }) {
+  const [key, setKey] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = () => {
+    if (!key.startsWith("sk-ant-")) { alert("That doesn't look like a valid key. It should start with sk-ant-"); return; }
+    setApiKey(key);
+    setSaved(true);
+    setTimeout(() => { setVisible(false); setSaved(false); if (onSaved) onSaved(); }, 1000);
+  };
+
+  if (!visible) return (
+    <div onClick={() => setVisible(true)} style={{ background: "#1a0a2e", border: "1px dashed #a855f7", borderRadius: 12, padding: "10px 16px", marginBottom: 16, cursor: "pointer", display: "flex", alignItems: "center", gap: 10 }}>
+      <span style={{ fontSize: 18 }}>🔑</span>
+      <div>
+        <div style={{ color: "#a855f7", fontWeight: 700, fontSize: 13 }}>Set Anthropic API Key</div>
+        <div style={{ color: "#666", fontSize: 11 }}>Required for AI food & exercise analysis</div>
+      </div>
+      <span style={{ marginLeft: "auto", color: "#a855f7", fontSize: 18 }}>›</span>
+    </div>
+  );
+
+  return (
+    <div style={{ background: "#1a0a2e", border: "1px solid #a855f7", borderRadius: 12, padding: 16, marginBottom: 16 }}>
+      <div style={{ color: "#a855f7", fontWeight: 700, fontSize: 13, marginBottom: 8 }}>🔑 Enter Your Anthropic API Key</div>
+      <div style={{ color: "#888", fontSize: 12, marginBottom: 12 }}>Get one free at <strong style={{color:"#e0e0ff"}}>console.anthropic.com</strong> → API Keys. Your key is saved only on this device.</div>
+      <input
+        type="password"
+        style={{ ...inp, marginBottom: 10, letterSpacing: 1 }}
+        placeholder="sk-ant-api03-..."
+        value={key}
+        onChange={e => setKey(e.target.value)}
+      />
+      <div style={{ display: "flex", gap: 8 }}>
+        <button onClick={() => setVisible(false)} style={{ flex: 1, background: "#2d2d4e", border: "none", borderRadius: 10, padding: "10px", color: "#888", cursor: "pointer", fontWeight: 600 }}>Cancel</button>
+        <button onClick={handleSave} style={{ flex: 2, background: saved ? "#38ef7d" : "linear-gradient(90deg,#a855f7,#7c7cff)", border: "none", borderRadius: 10, padding: "10px", color: saved ? "#0a0a1a" : "#fff", fontWeight: 700, cursor: "pointer" }}>
+          {saved ? "✓ Saved!" : "Save Key"}
+        </button>
+      </div>
+    </div>
+  );
 }
 
 // ── CalorieBar ───────────────────────────────────────────────────────────────
@@ -144,10 +198,13 @@ function CalorieBar({ consumed, burned, target }) {
 // ── SetupTab ─────────────────────────────────────────────────────────────────
 function SetupTab({ profile, setProfile, onSave }) {
   const [local, setLocal] = useState(profile);
+  const [, forceUpdate] = useState(0);
   useEffect(() => setLocal(profile), [profile]);
   const set = (k, v) => setLocal(p => ({ ...p, [k]: v }));
+  const hasKey = !!getApiKey();
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+      {!hasKey && <ApiKeyBanner onSaved={() => forceUpdate(n => n+1)} />}
       <div style={card}>
         <div style={{ color: "#7c7cff", fontWeight: 700, fontSize: 13, letterSpacing: 2, marginBottom: 14 }}>BODY METRICS</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
@@ -215,7 +272,10 @@ function LogFoodTab({ calorieGoal, log, setLog, exerciseLog }) {
       const prompt = `You are a nutrition expert. Analyze this food${desc ? `: "${desc}"` : " in the image"}. Return ONLY a JSON object, no markdown: {"name":"Food Name","calories":000,"confidence":"high/medium/low","notes":"brief note"}. Estimate for a typical single serving.`;
       const text = imgBase64 ? await callClaudeWithImage(imgBase64, prompt) : await callClaude(prompt);
       setResult(JSON.parse(text));
-    } catch { setResult({ name: desc || "Unknown food", calories: 0, confidence: "low", notes: "Could not analyze. Try again." }); }
+    } catch(err) {
+      if (err.message === "NO_KEY") { setResult({ name: desc || "Food", calories: 0, confidence: "low", notes: "⚠️ No API key set. Tap the 🔑 banner above to add your key." }); }
+      else { setResult({ name: desc || "Unknown food", calories: 0, confidence: "low", notes: "Could not analyze. Check your API key and try again." }); }
+    }
     setLoading(false);
   };
 
@@ -229,8 +289,12 @@ function LogFoodTab({ calorieGoal, log, setLog, exerciseLog }) {
 
   const removeEntry = (i) => setLog({ ...log, [todayKey]: log[todayKey].filter((_, idx) => idx !== i) });
 
+  const [, forceUpdate] = useState(0);
+  const hasKey = !!getApiKey();
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      {!hasKey && <ApiKeyBanner onSaved={() => forceUpdate(n => n+1)} />}
       <div style={card}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 10 }}>
           <div>
@@ -347,7 +411,10 @@ function ExerciseTab({ profile, calorieGoal, exerciseLog, setExerciseLog, log })
     try {
       const text = await callClaude(`Fitness expert. Calories burned for: "${aiDesc}". Person weighs ${weight}kg. Return ONLY JSON, no markdown: {"name":"Exercise Name","calories":000,"duration_minutes":00,"notes":"brief note"}. If duration not mentioned, assume 30 min.`);
       setAiResult(JSON.parse(text));
-    } catch { setAiResult({ name: aiDesc, calories: 0, duration_minutes: 30, notes: "Could not estimate." }); }
+    } catch(err) {
+      if (err.message === "NO_KEY") setAiResult({ name: aiDesc, calories: 0, duration_minutes: 30, notes: "⚠️ No API key. Go to the Food tab to add your key." });
+      else setAiResult({ name: aiDesc, calories: 0, duration_minutes: 30, notes: "Could not estimate. Check your API key." });
+    }
     setAiLoading(false);
   };
 
@@ -496,7 +563,10 @@ function SuggestionsTab({ calorieGoal, log, setLog, exerciseLog }) {
     try {
       const text = await callClaude(`Filipino nutrition expert. User has ${remaining} net calories remaining (goal:${calorieGoal}, eaten:${consumed}, burned:${burned}). Suggest 5 Filipino foods. Return ONLY JSON array, no markdown: [{"name":"Food Name","calories":000,"per":"serving size","tip":"brief tip"}]`);
       setAiSuggest(JSON.parse(text));
-    } catch { setAiSuggest([]); }
+    } catch(err) {
+      setAiSuggest([]);
+      if (err.message === "NO_KEY") alert("No API key set. Go to the Food tab to add your Anthropic API key.");
+    }
     setAiLoading(false);
   };
 
